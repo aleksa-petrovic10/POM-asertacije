@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "cypress": "^6.5.0"
+    "cypress": "^6.5.0",
+    "faker": "^5.4.0"
   },
   "devDependencies": {},
   "scripts": {

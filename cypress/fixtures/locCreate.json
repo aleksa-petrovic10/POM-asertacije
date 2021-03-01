@@ -1,0 +1,17 @@
+{
+    "start" : {
+        "email" : "#email",
+        "password" : "#password",
+        "submit" : "button[type='submit']"
+    },
+    
+    "gallery" : {
+        "clickGalleryButton" : "a[href='/create']",
+        "title" : "#title",
+        "description" : "#description",
+        "image" : "input[type='url']",
+        "addImage" : "form > :nth-child(3) > :nth-child(3)",
+        "submit" : "form > :nth-child(4)"
+
+    }
+}
