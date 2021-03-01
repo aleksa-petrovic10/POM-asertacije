@@ -1,0 +1,10 @@
+{
+    "login" : {
+        "email" : "acafaca10@test.com",
+        "password" : "11111111",
+        "emailWithoutMonkey" : "acacacatesti.com",
+        "passwordLessThan8" : "12345",
+        "wrongEmail" : "acafacetina@test.com",
+        "onlyLetterPassword" : "acafaca" 
+    }
+}

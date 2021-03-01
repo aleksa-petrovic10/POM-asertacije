@@ -15,7 +15,14 @@
         "password" : "#password",
         "passwordConfirmation" : "#password-confirmation",
         "checkbox" : "input[type='checkbox']",
-        "submit" : "button[type='submit']"
+        "submit" : "button[type='submit']",
+        "upozorenje" : ".alert"
+    },
+
+    "filter" : {
+        "searchInput" : "input[placeholder='Search...']",
+        "filterButton" : "button[type='button']",
+        "gallTitle" : "h2 > .box-title"
     }
 }
 
