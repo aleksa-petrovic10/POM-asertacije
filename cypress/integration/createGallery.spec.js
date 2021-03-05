@@ -34,15 +34,32 @@ describe ("Create gallery", () => {
         .and('be.visible')
     })
 
-    it ("Create gallery", () => {
+    let galleryId = "";
+
+    it ('Create gallery interception requesta', () => {
+        cy.intercept('POST', 'https://gallery-api.vivifyideas.com/api/galleries', (req) => {
+        }).as('succesfullCreate')
         createGallery.clickCreateGallery()
         createGallery.fillTitle(data.createGallery.title)
         createGallery.fillDescription(data.createGallery.description)
         createGallery.fillImage(data.createGallery.image)
         createGallery.clickSubmitButton()
+        cy.wait('@succesfullCreate').then((interception) => {
+            expect(interception.response.statusCode).to.equal(201)
+            galleryId = interception.response.body.id;
+        })
         cy.url().should('eq', 'https://gallery-app.vivifyideas.com/')
         createGallery.description.should('not.exist')
+    })
 
-
+    it('Delete gallery', () => {
+        cy.intercept('DELETE', `https://gallery-api.vivifyideas.com/api/galleries/${galleryId}`, (req) => {
+        }).as('succesfullDelete')
+        cy.get("a[href='/my-galleries']").click()
+        cy.get(`a[href="/galleries/${galleryId}"]`).click()
+        cy.contains('Delete Gallery').click()
+        cy.wait('@succesfullDelete').then((interception) => {
+            expect(interception.response.statusCode).to.equal(200)
+        })
     })
 })
