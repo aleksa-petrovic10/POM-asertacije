@@ -5,6 +5,31 @@
         "emailWithoutMonkey" : "acacacatesti.com",
         "passwordLessThan8" : "12345",
         "wrongEmail" : "acafacetina@test.com",
-        "onlyLetterPassword" : "acafaca" 
+        "onlyLetterPassword" : "acafacaaa" 
+    },
+
+    "register" : {
+        "firstName" : "Aleksa",
+        "lastName" : "Aleksic",
+        "email" : "acafaca10@test.com",
+        "password" : "11111111",
+        "passwordConfirmation" : "11111111",
+        "wrongPassword8" : "12345678",
+        "passwordOnlyLetters" : "aaaaaaaa",
+        "passwordShort" : "1234",
+        "emailWithoutMonkey": "acacacatesti.com",
+        "emailWithoutDot" : "acacakas@com"
+    },
+
+    "createGallery" : {
+        "title" : "aca",
+        "description" : "faca",
+        "image" : "https://www.alo.rs/resources/images/0000/112/939/aca2_1000x0.png",
+        "imageWrongFormat" : "https://www.alo.rs/resources/images/0000/112/939/aca2_1000"
+    },
+
+    "filter" : {
+        "uniqueSearch" : "jedna",
+        "multipleSearch" : "kuce"
     }
 }

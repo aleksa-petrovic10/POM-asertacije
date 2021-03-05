@@ -1,34 +1,48 @@
-const locCreate = require("../fixtures/locCreate.json")
+import { createGallery } from '../page_objects/createGallery'
+
+const data = require("../fixtures/data.json")
 
 describe ("Create gallery", () => {
 
-    before(() => {
+    beforeEach(() => {
         cy.visit('https://gallery-app.vivifyideas.com/login')
-    })
-
-    it ('Login', () => {
-        cy.get(locCreate.start.email).type('acafaca10@test.com')
-        cy.get(locCreate.start.password).type('11111111')
-        cy.get(locCreate.start.submit).click()
+        createGallery.login(data.login.email, data.login.password)
     })
 
     it ("Create gallery one letter", () => {
-        cy.get(locCreate.gallery.clickGalleryButton).click()
-        cy.get(locCreate.gallery.title).type('a')
-        cy.get(locCreate.gallery.description).type('informacija')
-        cy.get(locCreate.gallery.image).type('https://www.alo.rs/resources/images/0000/112/939/aca2_1000x0.png')
-        cy.get(locCreate.gallery.submit).click()
-        cy.get(locCreate.gallery.upozorenje)
-        .should("have.class", "alert alert-danger")
+        createGallery.clickCreateGallery()
+        createGallery.fillTitle('a')
+        createGallery.fillDescription(data.createGallery.description)
+        createGallery.fillImage(data.createGallery.image)
+        createGallery.clickSubmitButton()
+        createGallery.upozorenje
+        .should('contain', 'The title must be at least 2 characters.')
+        .and("have.class", "alert alert-danger")
+        .and('have.css', 'background-color', 'rgb(248, 215, 218)')
+        .and('be.visible')
+    })
+    it ("Create gallery with wrong image format", () => {
+        createGallery.clickCreateGallery()
+        createGallery.fillTitle(data.createGallery.title)
+        createGallery.fillDescription(data.createGallery.description)
+        createGallery.fillImage(data.createGallery.imageWrongFormat)
+        createGallery.clickSubmitButton()
+        createGallery.upozorenje
+        .should('contain', 'Wrong format of image')
+        .and("have.class", "alert alert-danger")
         .and('have.css', 'background-color', 'rgb(248, 215, 218)')
         .and('be.visible')
     })
 
-    // it ("Create gallery", () => {
-    //     cy.get(locCreate.gallery.clickGalleryButton).click()
-    //     cy.get(locCreate.gallery.title).type('aca')
-    //     cy.get(locCreate.gallery.description).type('informacija')
-    //     cy.get(locCreate.gallery.image).type('https://www.alo.rs/resources/images/0000/112/939/aca2_1000x0.png')
-    //     cy.get(locCreate.gallery.submit).click()
-    // })
+    it ("Create gallery", () => {
+        createGallery.clickCreateGallery()
+        createGallery.fillTitle(data.createGallery.title)
+        createGallery.fillDescription(data.createGallery.description)
+        createGallery.fillImage(data.createGallery.image)
+        createGallery.clickSubmitButton()
+        cy.url().should('eq', 'https://gallery-app.vivifyideas.com/')
+        createGallery.description.should('not.exist')
+
+
+    })
 })

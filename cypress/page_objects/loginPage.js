@@ -13,6 +13,15 @@ class LoginPage {
         return cy.get('button[type="submit"]')
     }
 
+    get logoutButton() {
+        return cy.get(".ml-auto > :nth-child(3) > .nav-link")
+    }
+
+    get upozorenje() {
+        return cy.get(".alert")
+    }
+
+
     fillEmailInput(email) {
         this.emailInput.type(email)
     }
@@ -23,6 +32,10 @@ class LoginPage {
 
     clickSubmitButton() {
         this.submitButton.click()
+    }
+
+    clickLogoutButton() {
+        this.logoutButton.click()
     }
 
     login(email, password) {

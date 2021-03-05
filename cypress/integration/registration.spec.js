@@ -1,64 +1,142 @@
-const locators = require("../fixtures/locators.json")
+import {registerPage} from '../page_objects/registerPage'
+const data = require("../fixtures/data.json")
 const faker = require('faker');
+
 
 describe("Register", () => {
 
     //userdata varijablu pravimo ako zelimo da svaki test koristi iste podatke
-    var userData = {
-        randomName: faker.name.firstName(),
-        randomLastname : faker.name.lastName(),
-        randomEmail : faker.internet.email(),
-        randomPassword : faker.internet.password()
-    }
+    // var userData = {
+    //     randomName: faker.name.firstName(),
+    //     randomLastname : faker.name.lastName(),
+    //     randomEmail : faker.internet.email(),
+    //     randomPassword : faker.internet.password()
+    // }
 
-
-    it('Visit gallery page', () => {
-        cy.visit('/') 
-    })
-    it ('Click on register button', () => {
-        cy.get(locators.register.registerButton).click()
+    beforeEach(() => {
+            cy.visit('/') 
+            registerPage.clickRegisterButton()
     })
 
-    let password = faker.internet.password();
+    // let password = faker.internet.password();
     //ova gore varijabla je ako hocemo da bude isti password u polju password i password confirmation, prilikom koriscenja fakera
-
-    it('Without email', () => {
-        cy.get(locators.register.firstName).type(faker.name.firstName())
-        cy.get(locators.register.lastName).type(faker.name.lastName())
+    it ('Registration', () => {
+        registerPage.fillFirstName(data.register.firstName)
+        registerPage.fillLastName(data.register.lastName)
+        registerPage.fillEmail(faker.internet.email())
+        registerPage.fillPassword(data.register.password)
+        registerPage.fillPasswordConfirmation(data.register.passwordConfirmation)     
+        registerPage.clickCheckbox()
+        registerPage.clickSubmitButton()
+    })
+    it ('All empty fields', () => {
+        registerPage.clickSubmitButton()
+        cy.wait(1500)
+    })
+    it ('Without first name', () => {
         
-        cy.get(locators.register.password).type(password)
-        cy.get(locators.register.passwordConfirmation).type(password)
-        cy.get(locators.register.checkbox).check()
-        cy.get(locators.register.submit).click()
+        registerPage.fillLastName(data.register.lastName)
+        registerPage.fillEmail(faker.internet.email())
+        registerPage.fillPassword(data.register.password)
+        registerPage.fillPasswordConfirmation(data.register.passwordConfirmation)     
+        registerPage.clickCheckbox()
+        registerPage.clickSubmitButton()
+    })
+    it ('Without last name', () => {
+        registerPage.fillFirstName(data.register.firstName)
+        
+        registerPage.fillEmail(faker.internet.email())
+        registerPage.fillPassword(data.register.password)
+        registerPage.fillPasswordConfirmation(data.register.passwordConfirmation)     
+        registerPage.clickCheckbox()
+        registerPage.clickSubmitButton()
+    })
+    it('Without email', () => {
+        registerPage.fillFirstName(data.register.firstName)
+        registerPage.fillLastName(data.register.lastName)
+        
+        registerPage.fillPassword(data.register.password)
+        registerPage.fillPasswordConfirmation(data.register.passwordConfirmation)     
+        registerPage.clickCheckbox()
+        registerPage.clickSubmitButton()
+    })
+    it ('Without password', () => {
+        registerPage.fillFirstName(data.register.firstName)
+        registerPage.fillLastName(data.register.lastName)
+        registerPage.fillEmail(faker.internet.email())
+        
+        registerPage.fillPasswordConfirmation(data.register.passwordConfirmation)     
+        registerPage.clickCheckbox()
+        registerPage.clickSubmitButton()
+    })
+    it ('Without password confirmation', () => {
+        registerPage.fillFirstName(data.register.firstName)
+        registerPage.fillLastName(data.register.lastName)
+        registerPage.fillEmail(faker.internet.email())
+        registerPage.fillPassword(data.register.password)
+            
+        registerPage.clickCheckbox()
+        registerPage.clickSubmitButton()
+    })
+    it ('Email without @', () => {
+        registerPage.fillFirstName(data.register.firstName)
+        registerPage.fillLastName(data.register.lastName)
+        registerPage.fillEmail(data.register.emailWithoutMonkey)
+        registerPage.fillPassword(data.register.password)
+        registerPage.fillPasswordConfirmation(data.register.passwordConfirmation)     
+        registerPage.clickCheckbox()
+        registerPage.clickSubmitButton()
+    })
+    it ('Email without dot', () => {
+        registerPage.fillFirstName(data.register.firstName)
+        registerPage.fillLastName(data.register.lastName)
+        registerPage.fillEmail(data.register.emailWithoutDot)
+        registerPage.fillPassword(data.register.password)
+        registerPage.fillPasswordConfirmation(data.register.passwordConfirmation)     
+        registerPage.clickCheckbox()
+        registerPage.clickSubmitButton()
     })
     it ('Password confirmation doesnt match', () => {
-        cy.get(locators.register.firstName).clear().type('Aleksa')
-        cy.get(locators.register.lastName).clear().type('Petrovic')
-        cy.get("#email").clear().type(faker.internet.email())
-        cy.get(locators.register.password).clear().type('11111111')
-        cy.get(locators.register.passwordConfirmation).clear().type('1111111112')
-        cy.get(locators.register.checkbox).check()
-        cy.get(locators.register.submit).click()
-        cy.get(locators.register.upozorenje).should('contain', 'The password confirmation does not match.')
+        registerPage.fillFirstName(data.register.firstName)
+        registerPage.fillLastName(data.register.lastName)
+        registerPage.fillEmail(faker.internet.email())
+        registerPage.fillPassword(data.register.password)
+        registerPage.fillPasswordConfirmation(data.register.wrongPassword8)     
+        registerPage.clickCheckbox()
+        registerPage.clickSubmitButton()
+        registerPage.upozorenje.should('contain', 'The password confirmation does not match.')
+    })
+    it ('Password with only letters', () => {
+        registerPage.fillFirstName(data.register.firstName)
+        registerPage.fillLastName(data.register.lastName)
+        registerPage.fillEmail(faker.internet.email())
+        registerPage.fillPassword(data.register.passwordOnlyLetters)
+        registerPage.fillPasswordConfirmation(data.register.passwordOnlyLetters)     
+        registerPage.clickCheckbox()
+        registerPage.clickSubmitButton()
+        registerPage.upozorenje.should('contain', 'The password format is invalid.')
+    })
+    it ('Password less than 8 chars', () => {
+        registerPage.fillFirstName(data.register.firstName)
+        registerPage.fillLastName(data.register.lastName)
+        registerPage.fillEmail(faker.internet.email())
+        registerPage.fillPassword(data.register.passwordShort)
+        registerPage.fillPasswordConfirmation(data.register.passwordShort)     
+        registerPage.clickCheckbox()
+        registerPage.clickSubmitButton()
+        registerPage.upozorenje.should('contain', 'The password must be at least 8 characters.')
     })
     it ('Terms unchecked', () => {
-        cy.get(locators.register.firstName).clear().type('Aleksa')
-        cy.get(locators.register.lastName).clear().type('Petrovic')
-        cy.get("#email").clear().type(faker.internet.email())
-        cy.get(locators.register.password).clear().type('11111111')
-        cy.get(locators.register.passwordConfirmation).clear().type('11111111')
-        cy.get(locators.register.checkbox).uncheck()
-        cy.get(locators.register.submit).click()
-        cy.get(locators.register.upozorenje).should('contain', 'The terms and conditions must be accepted.')
+        registerPage.fillFirstName(data.register.firstName)
+        registerPage.fillLastName(data.register.lastName)
+        registerPage.fillEmail(faker.internet.email())
+        registerPage.fillPassword(data.register.password)
+        registerPage.fillPasswordConfirmation(data.register.passwordConfirmation)     
+        registerPage.checkbox.should('not.be.checked')
+        
+        registerPage.clickSubmitButton()
+        registerPage.upozorenje.should('contain', 'The terms and conditions must be accepted.')
     })
-    it ('Registration', () => {
-        cy.get(locators.register.firstName).clear().type('Aleksa')
-        cy.get(locators.register.lastName).clear().type('Petrovic')
-        cy.get("#email").clear().type(faker.internet.email())
-        cy.get(locators.register.password).clear().type('11111111')
-        cy.get(locators.register.passwordConfirmation).clear().type('11111111')
-        cy.get(locators.register.checkbox).check()
-        cy.get(locators.register.submit).click()
-    })
-
+    
+    
  })
